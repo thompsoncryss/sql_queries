@@ -1,0 +1,23 @@
+--Using SQL to create a table and add rows
+
+--First, I created the table
+
+create table black_actresses (
+    id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
+    birthday TEXT,
+    awards INTEGER DEFAULT 0
+    
+
+);
+
+--Next I added rows
+
+INSERT INTO black_actresses (id, name, birthday, awards)
+VALUES (1001, 'Viola Davis', '1965-08-11', 1),
+        (2002, 'Lupita Nyongo', '1983-03-01', 1);
+        
+--Finally, I checked my work to see how it would come out
+        
+SELECT *
+FROM black_actresses
