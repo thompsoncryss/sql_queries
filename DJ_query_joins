@@ -1,0 +1,83 @@
+/* Identify Most Popular Genres
+   Within those genres, find albums with the most tracks
+   --these albums can play for a good length of the party just in case the DJ needs a break 
+   Filter out tracks that are less than 
+   3 minutes long (180,000 ms) -- too short to dance to*/ 
+
+
+--First I wanted to see what genres we have   
+SELECT *
+FROM genres;
+
+--Then I wanted to see what we have in our tracks table
+
+SELECT *
+FROM tracks
+LIMIT 5;
+
+
+--Identify most popular genres
+
+SELECT GenreId, COUNT(*) as Genre_Count
+FROM tracks
+GROUP BY GenreID
+ORDER BY Genre_Count DESC;  -- note that 1, 7, 3 top genre ID's
+
+
+
+--perform inner join to identify what genre ID 1 (Rock), 7 (Latin), and 3(Metal) are
+
+SELECT g.name, COUNT(*) as Genre_Count
+FROM tracks AS t
+INNER JOIN genres AS g
+    ON t.GenreId = g.GenreId
+GROUP BY g.name
+ORDER BY Genre_Count DESC;
+
+
+
+
+
+--Within those genres, find albums with the most tracks
+
+SELECT AlbumId, COUNT(*) AS Track_Count, GenreID
+FROM tracks
+WHERE GenreId IN (1, 7, 3)
+GROUP BY AlbumID
+ORDER BY Track_Count DESC;
+
+
+-- Note Albums 141, 23, 24
+
+
+
+
+--perform a join to figure out what those albums are
+
+SELECT a.AlbumID, a.Title, COUNT(TrackId) AS Track_Count, t.GenreID
+FROM tracks AS t
+INNER JOIN albums AS a
+    ON t.AlbumID = a.AlbumID
+WHERE t.GenreId IN (1, 7, 3) AND a.AlbumID IN (141, 23, 24)
+GROUP BY a.AlbumID
+ORDER BY Track_Count DESC;
+
+
+--Note Greatest Hits, Minha Historia, Afrociberdelia
+
+
+
+ /*these albums can play for a good length of the party just in case the DJ needs a break. Filter out tracks that are less than 
+   3 minutes long (180,000 ms) -- too short to dance to*/ 
+
+
+
+SELECT AlbumID, Name, TrackID, Milliseconds
+FROM tracks
+WHERE GenreId IN (1, 7, 3) AND AlbumID IN (141, 23, 24)
+GROUP BY Milliseconds
+HAVING Milliseconds > 180000
+ORDER BY Milliseconds DESC;
+
+
+
